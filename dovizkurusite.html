@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Döviz Kuru Sitesi - Burak Özdemir</title>
+    <style>
+        body{
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            
+            padding: 40px;
+            text-align: center;
+        }
+        h1{
+            color:#fff;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px #ccc;
+        }
+        input, select {
+            padding:12px 15px;
+            margin:10px;
+            border:1px solid #b2dfdb;
+            border-radius: 8px;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding:12px 24px;
+            border:none;
+            border-radius: 8px;
+            font-size:16px;
+            cursor:pointer;
+            margin-top:20px;
+            background-color: #00796c;
+            color:#fff;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 121, 107, 0.3);
+        }
+        button:hover{
+            background-color: #004d40;
+        }
+        #result{
+            margin-top: 30px;
+            font-size:20px;
+            font-weight: bold;
+            color: #004d40;
+            
+        }
+    </style>
+</head>
+<body>
+    <h1>Döviz Kuru Hesaplayıcı</h1>
+    <input type="number" id="istediginizMiktar" placeholder="Miktarı Yazın" min="0">
+    <select id="istediginizParaBirimi">
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+    </select>
+    <br>
+    <H2>Çevirmek İstediğiniz Para Birimini Seçin</H2>
+    <select id="cevirmekİstediginizParaBirimi">
+        <option value="TRY">TRY</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+    </select>
+    <br>
+    <button onclick="cevir()">Dönüştür</button>
+<div id="sonuc"></div>
+<script>
+    function cevir() {
+    var istediginizMiktar = document.getElementById("istediginizMiktar").value;
+    var istediginizParaBirimi = document.getElementById("istediginizParaBirimi").value;
+    var cevirmekIstediginizParaBirimi = document.getElementById("cevirmekİstediginizParaBirimi").value;
+
+    if (istediginizMiktar === "") {
+        alert("Lütfen Tüm Alanları Doldurunuz");
+        return;
+    }
+
+    fetch(`https://v6.exchangerate-api.com/v6/2debef3e7f02c3f51bc9de7b/latest/${istediginizParaBirimi}`)
+        .then(response => response.json())
+        .then(data => {
+            var rate = data.conversion_rates[cevirmekIstediginizParaBirimi];
+            var sonuc = (istediginizMiktar * rate).toFixed(2);
+            console.log(`${istediginizMiktar} ${istediginizParaBirimi} = ${sonuc} ${cevirmekIstediginizParaBirimi}`);
+        })
+        .catch(error => console.error("Hata oluştu:", error));
+}
+
+</script>
+</body>
+</html>
